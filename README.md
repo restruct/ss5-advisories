@@ -78,8 +78,9 @@ Notes:
   `composer audit` fails. To make `update` fail as well, add `"config": {"policy": {"ignore-unreachable": false}}`.
 - `silverstripe/mfa` CVE-2026-55186 is not handled here: it is fixed by installing
   [restruct/silverstripe-mfa-bundle](https://github.com/restruct/silverstripe-mfa-bundle), which a shared feed cannot
-  see. A project that has the bundle ignores that one advisory itself, with a reason:
-  `"config": {"policy": {"advisories": {"ignore-id": {"PKSA-xxk3-rjxm-jftv": "fixed by restruct/silverstripe-mfa-bundle"}}}}`.
+  see. A project that has the bundle at 1.9.1 or later (require `"restruct/silverstripe-mfa-bundle": "^1.9.1"`)
+  ignores that one advisory itself, with a reason:
+  `"config": {"policy": {"advisories": {"ignore-id": {"PKSA-xxk3-rjxm-jftv": "fixed by restruct/silverstripe-mfa-bundle >= 1.9.1"}}}}`.
 - When the project moves to CMS 6, remove all of the above.
 
 ## Maintaining it
