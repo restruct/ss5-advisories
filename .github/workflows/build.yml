@@ -1,0 +1,70 @@
+name: Build and publish the feed
+
+# Rebuilds the advisory feed from Packagist every day, so a new upstream advisory reaches sites
+# that use the feed without anyone doing anything. A build whose rewritten ranges fail
+# verification stops before deploying, and the previously published feed stays in place.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '47 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  issues: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          coverage: none
+
+      - run: composer install --no-interaction --no-progress
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: php build.php "https://restruct.github.io/${{ github.event.repository.name }}"
+
+      - name: Open an issue for each untriaged or stale advisory
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          open_once() {
+            # $1 title, $2 body; skip when an issue with this exact title exists, open or closed
+            local n
+            n=$(gh issue list --repo "$GITHUB_REPOSITORY" --state all --search "\"$1\" in:title" --json title --jq "map(select(.title == \"$1\")) | length")
+            [ "$n" -gt 0 ] || gh issue create --repo "$GITHUB_REPOSITORY" --title "$1" --body "$2"
+          }
+          jq -c '.untriaged[]' public/report.json | while read -r a; do
+            id=$(jq -r .advisoryId <<<"$a"); pkg=$(jq -r .package <<<"$a")
+            open_once "Untriaged advisory $id ($pkg)" "$(jq -r '"\(.title)\n\nAffected: `\(.affectedVersions)`\n\n\(.link // "")\n\nIt affects what a CMS 5 site installs and is passed through unchanged, so it blocks and reports as it would from Packagist. Backport the fix into the fork and add it to advisories.json, or record why it does not apply."' <<<"$a")"
+          done
+          jq -r '."stale-triage"[]' public/report.json | while read -r id; do
+            open_once "Stale triage entry $id" "advisories.json triages $id, but Packagist no longer lists it for that package (withdrawn or moved). Check and remove or correct the entry."
+          done
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

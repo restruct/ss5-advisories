@@ -1,0 +1,13 @@
+{
+    "name": "restruct/ss5-advisories",
+    "description": "Builds the Composer advisory feed for the restruct CMS 5 security backport forks.",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": "^8.1",
+        "composer/semver": "^3.4"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

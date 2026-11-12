@@ -1,0 +1,95 @@
+{
+    "_comment": "Triage of every advisory against the packages below. build.php copies Packagist's advisories into the feed and rewrites the affected range of each advisory listed here; an advisory that is not listed is passed through unchanged and reported as untriaged.",
+    "forks": {
+        "silverstripe/framework": "restruct/silverstripe-framework",
+        "silverstripe/versioned": "restruct/silverstripe-versioned",
+        "silverstripe/assets": "restruct/silverstripe-assets",
+        "silverstripe/userforms": "restruct/silverstripe-userforms"
+    },
+    "mirrored": {
+        "_comment": "Packages that are not forked but carry an advisory that does not apply to CMS 5. The feed serves a copy of Packagist's metadata for them (same dist URLs), so their advisories can be rewritten too; sites exclude them from Packagist.",
+        "silverstripe/cms": "Packagist"
+    },
+    "lines": {
+        "_comment": "The CMS 5 release line of each package. An advisory needs triage only if it affects the newest upstream release on this line or a patched fork tag; anything else is passed through without an issue.",
+        "silverstripe/framework": "5.4",
+        "silverstripe/versioned": "2.4",
+        "silverstripe/assets": "2.4",
+        "silverstripe/userforms": "6.4",
+        "silverstripe/cms": "5.4"
+    },
+    "advisories": {
+        "PKSA-s9ft-gn8c-nz8s": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.30-p1",
+            "id": "SS-2026-004"
+        },
+        "PKSA-byd1-vwr7-j3ng": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.30-p1",
+            "id": "CVE-2026-88989"
+        },
+        "PKSA-x6tz-s6v3-ynk3": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.30-p1",
+            "id": "CVE-2026-54720"
+        },
+        "PKSA-mxm6-h6dq-vmtc": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.30-p1",
+            "id": "CVE-2026-91110"
+        },
+        "PKSA-3ddc-hhgt-bqh9": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.30-p1",
+            "id": "CVE-2026-88987"
+        },
+        "PKSA-v91s-x13r-xsps": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.30-p1",
+            "id": "CVE-2026-88988"
+        },
+        "PKSA-r36n-y55f-yj29": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.30-p1",
+            "id": "CVE-2026-91112"
+        },
+        "PKSA-2w11-jnmw-7vn5": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.30-p1",
+            "id": "CVE-2026-91114"
+        },
+        "PKSA-2h3f-jtk1-8f25": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.30-p1",
+            "id": "CVE-2026-91113"
+        },
+        "PKSA-nksq-cxj8-zb32": {
+            "package": "silverstripe/versioned",
+            "fixed-in": "2.4.8-p1",
+            "id": "CVE-2026-55779"
+        },
+        "PKSA-vyds-y4jb-5ff4": {
+            "package": "silverstripe/userforms",
+            "fixed-in": "6.4.10-p1",
+            "id": "CVE-2026-91111",
+            "note": "The code fix is in the assets fork (2.4.6-p1); userforms 6.4.10-p1 requires it, as upstream's fix requires assets ^3.2.3."
+        },
+        "PKSA-w1yx-v3g8-nw8g": {
+            "package": "silverstripe/userforms",
+            "fixed-in": "6.4.10-p1",
+            "id": "CVE-2026-88992"
+        },
+        "PKSA-r5k2-9jwp-nhhh": {
+            "package": "silverstripe/userforms",
+            "fixed-in": "6.4.10-p1",
+            "id": "SS-2026-005"
+        },
+        "PKSA-pjvm-vnw2-n3m2": {
+            "package": "silverstripe/cms",
+            "affected": ">=6.0.0,<6.2.1",
+            "id": "CVE-2026-54717",
+            "note": "Not applicable to cms 5: its list view builds the breadcrumb line with SiteTree::Breadcrumbs(), which escapes titles (checked by rendering it with a title holding an img onerror payload). The unescaped loop the fix replaces first appears in cms 6.0."
+        }
+    }
+}
