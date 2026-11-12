@@ -254,6 +254,26 @@ file_put_contents("$out/packages.json", json_encode([
 ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 file_put_contents("$out/report.json", json_encode($report, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 file_put_contents("$out/untriaged.json", json_encode($report['untriaged'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+# A person who opens the feed URL in a browser gets a page instead of a 404; Composer only reads packages.json.
+file_put_contents("$out/index.html", <<<HTML
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ss5-advisories</title>
+</head>
+<body>
+<h1>ss5-advisories</h1>
+<p>This is a Composer repository, not a website: Composer reads <a href="packages.json">packages.json</a>.</p>
+<p>It carries the security advisories for the Silverstripe CMS 5 security forks, with the patched tags taken out of the
+affected ranges. How to use it in a project:
+<a href="https://github.com/restruct/ss5-advisories#use-it-in-a-project">README, "Use it in a project"</a>.</p>
+<p>Build report: <a href="report.json">report.json</a>.</p>
+</body>
+</html>
+
+HTML);
 
 printf("rewritten: %d, untriaged: %d, stale triage: %d\n", count($report['rewritten']), count($report['untriaged']), count($report['stale-triage']));
 foreach ($report['rewritten'] as $r) {

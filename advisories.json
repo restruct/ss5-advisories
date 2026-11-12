@@ -4,7 +4,8 @@
         "silverstripe/framework": "restruct/silverstripe-framework",
         "silverstripe/versioned": "restruct/silverstripe-versioned",
         "silverstripe/assets": "restruct/silverstripe-assets",
-        "silverstripe/userforms": "restruct/silverstripe-userforms"
+        "silverstripe/userforms": "restruct/silverstripe-userforms",
+        "silverstripe/mfa": "restruct/silverstripe-mfa"
     },
     "mirrored": {
         "_comment": "Packages that are not forked but carry an advisory that does not apply to CMS 5. The feed serves a copy of Packagist's metadata for them (same dist URLs), so their advisories can be rewritten too; sites exclude them from Packagist.",
@@ -16,7 +17,8 @@
         "silverstripe/versioned": "2.4",
         "silverstripe/assets": "2.4",
         "silverstripe/userforms": "6.4",
-        "silverstripe/cms": "5.4"
+        "silverstripe/cms": "5.4",
+        "silverstripe/mfa": "5.4"
     },
     "advisories": {
         "PKSA-s9ft-gn8c-nz8s": {
@@ -90,6 +92,11 @@
             "affected": ">=6.0.0,<6.2.1",
             "id": "CVE-2026-54717",
             "note": "Not applicable to cms 5: its list view builds the breadcrumb line with SiteTree::Breadcrumbs(), which escapes titles (checked by rendering it with a title holding an img onerror payload). The unescaped loop the fix replaces first appears in cms 6.0."
+        },
+        "PKSA-xxk3-rjxm-jftv": {
+            "package": "silverstripe/mfa",
+            "fixed-in": "5.4.4-p1",
+            "id": "CVE-2026-55186"
         }
     }
 }

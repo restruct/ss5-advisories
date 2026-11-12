@@ -17,7 +17,7 @@ and without hiding anything they do not fix.
 
 The forks ([framework](https://github.com/restruct/silverstripe-framework),
 [versioned](https://github.com/restruct/silverstripe-versioned), [assets](https://github.com/restruct/silverstripe-assets),
-[userforms](https://github.com/restruct/silverstripe-userforms)) keep the upstream package names and tag their releases
+[userforms](https://github.com/restruct/silverstripe-userforms), [mfa](https://github.com/restruct/silverstripe-mfa)) keep the upstream package names and tag their releases
 `<upstream version>-pN`, for example `5.4.30-p1`. Packagist records advisories by package name and version range, and
 those ranges (such as `<6.2.13`) include the patched tags. So, out of the box, Composer refuses to install them and
 `composer audit` reports advisories that are fixed.
@@ -53,7 +53,7 @@ metadata for it: the same versions and the same download URLs as on Packagist.
 
 ## Use it in a project
 
-Add the forks, the feed, and Packagist with these five names excluded. Order matters: the forks first.
+Add the forks, the feed, and Packagist with these six names excluded. Order matters: the forks first.
 
 ```json
 "repositories": [
@@ -61,26 +61,25 @@ Add the forks, the feed, and Packagist with these five names excluded. Order mat
     {"type": "vcs", "url": "https://github.com/restruct/silverstripe-versioned", "only": ["silverstripe/versioned"]},
     {"type": "vcs", "url": "https://github.com/restruct/silverstripe-assets", "only": ["silverstripe/assets"]},
     {"type": "vcs", "url": "https://github.com/restruct/silverstripe-userforms", "only": ["silverstripe/userforms"]},
+    {"type": "vcs", "url": "https://github.com/restruct/silverstripe-mfa", "only": ["silverstripe/mfa"]},
     {"type": "composer", "url": "https://restruct.github.io/ss5-advisories"},
     {"type": "composer", "url": "https://repo.packagist.org",
-     "exclude": ["silverstripe/framework", "silverstripe/versioned", "silverstripe/assets", "silverstripe/userforms", "silverstripe/cms"]},
+     "exclude": ["silverstripe/framework", "silverstripe/versioned", "silverstripe/assets", "silverstripe/userforms", "silverstripe/mfa", "silverstripe/cms"]},
     {"packagist.org": false}
 ]
 ```
 
-Then `composer update silverstripe/framework silverstripe/versioned silverstripe/assets silverstripe/userforms silverstripe/cms`.
+Then `composer update silverstripe/framework silverstripe/versioned silverstripe/assets silverstripe/userforms silverstripe/mfa silverstripe/cms`.
+A package the project does not use is simply not installed; keep its entries anyway, so the block is the same everywhere.
 
 Notes:
 
-- Use the forks and the feed together. The feed provides no versions of the four forked packages itself, so without
+- Use the forks and the feed together. The feed provides no versions of the five forked packages itself, so without
   the forks they cannot be installed at all.
 - If the feed cannot be reached, `composer update` carries on with a warning and without these advisories, while
   `composer audit` fails. To make `update` fail as well, add `"config": {"policy": {"ignore-unreachable": false}}`.
-- `silverstripe/mfa` CVE-2026-55186 is not handled here: it is fixed by installing
-  [restruct/silverstripe-mfa-bundle](https://github.com/restruct/silverstripe-mfa-bundle), which a shared feed cannot
-  see. A project that has the bundle at 1.9.1 or later (require `"restruct/silverstripe-mfa-bundle": "^1.9.1"`)
-  ignores that one advisory itself, with a reason:
-  `"config": {"policy": {"advisories": {"ignore-id": {"PKSA-xxk3-rjxm-jftv": "fixed by restruct/silverstripe-mfa-bundle >= 1.9.1"}}}}`.
+- No `ignore-id` is needed for any of these advisories, and an existing one (for example `PKSA-xxk3-rjxm-jftv`, mfa
+  CVE-2026-55186) should be removed: it silences the advisory for every version, including an unpatched one.
 - When the project moves to CMS 6, remove all of the above.
 
 ## Maintaining it
