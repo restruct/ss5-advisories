@@ -97,6 +97,18 @@
             "package": "silverstripe/mfa",
             "fixed-in": "5.4.4-p1",
             "id": "CVE-2026-55186"
+        },
+        "PKSA-tfyf-4wdb-t8xv": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.31-p1",
+            "id": "SS-2026-008",
+            "note": "Critical; upstream fixed it on the 5.4 line in 5.4.31, which 5.4.31-p1 merges."
+        },
+        "PKSA-b47r-zdq6-95zf": {
+            "package": "silverstripe/framework",
+            "fixed-in": "5.4.31-p1",
+            "id": "SS-2026-009",
+            "note": "Critical; upstream fixed it on the 5.4 line in 5.4.31, which 5.4.31-p1 merges."
         }
     }
 }
