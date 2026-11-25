@@ -12,7 +12,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # write: the built feed is pushed to the gh-pages branch (step "Publish to the gh-pages branch")
+  contents: write
   pages: write
   id-token: write
   issues: write
@@ -61,6 +62,26 @@ jobs:
           jq -r '."stale-triage"[]' public/report.json | while read -r id; do
             open_once "Stale triage entry $id" "advisories.json triages $id, but Packagist no longer lists it for that package (withdrawn or moved). Check and remove or correct the entry."
           done
+
+      - name: Publish to the gh-pages branch
+        # Pages serves this branch once Settings > Pages > Source is "Deploy from a branch" (gh-pages, /).
+        # The artifact deploy below (actions/deploy-pages) failed intermittently on 21, 24 and 25 Nov 2026
+        # with "No artifacts named github-pages" while the upload had succeeded, leaving the live feed stale;
+        # a plain push does not go through that step. One commit per build, force-pushed: the branch carries
+        # only the current feed (main and the run logs hold the history).
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd public
+          # no Jekyll processing: serve the files exactly as built
+          touch .nojekyll
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Feed build of ${GITHUB_SHA::7} (run ${GITHUB_RUN_ID})"
+          git push -q --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
 
       - uses: actions/upload-pages-artifact@v3
         with:
