@@ -1,0 +1,16 @@
+{
+    "packages": [],
+    "metadata-url": "https://restruct.github.io/ss5-advisories/p2/%package%.json",
+    "available-packages": [
+        "silverstripe/framework",
+        "silverstripe/versioned",
+        "silverstripe/assets",
+        "silverstripe/userforms",
+        "silverstripe/mfa",
+        "silverstripe/cms"
+    ],
+    "security-advisories": {
+        "metadata": true,
+        "api-url": null
+    }
+}
